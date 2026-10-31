@@ -199,6 +199,8 @@ export async function getSite(slug: string): Promise<Site | null> {
   return sites.find((s) => s.slug === normalized) ?? null;
 }
 
+export let lastBlobError: string | null = null;
+
 export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
   const sanitized = sanitizeSite(site);
   if (!sanitized) {
@@ -256,6 +258,7 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
   } else {
     blobError = "hasBlobStorage() returned false - no BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID in env";
   }
+  lastBlobError = blobError;
 
   // 2. Also save to local or /tmp file
   try {

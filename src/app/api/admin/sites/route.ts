@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getAllSites, saveSite, deleteSite, type Site } from "@/lib/sites";
+import { getAllSites, saveSite, deleteSite, lastBlobError, type Site } from "@/lib/sites";
 
 function verifyAuth(request: Request, bodyPassword?: string): boolean {
   const headerPassword = request.headers.get("x-admin-password");
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     revalidatePath(`/${saved.slug}/poster`);
 
     const allSites = await getAllSites();
-    return NextResponse.json({ success: true, site: saved, sites: allSites });
+    return NextResponse.json({ success: true, site: saved, sites: allSites, blobError: lastBlobError });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json({ error: message }, { status: 500 });
