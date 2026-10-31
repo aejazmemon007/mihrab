@@ -14,7 +14,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-ENV SITE_URL=https://theboxux.com
+ENV SITE_URL=https://mihrab-masjid.theboxux.com
 RUN npm run build
 
 # Step 3: Production Runner
@@ -42,4 +42,3 @@ USER nextjs
 EXPOSE 3000
 
 CMD ["npm", "start"]
-

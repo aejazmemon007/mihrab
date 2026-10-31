@@ -1,90 +1,88 @@
-# Mihrab Production Deployment Guide (https://theboxux.com)
+# Mihrab Production Deployment Guide (Subdomain)
 
-This guide provides step-by-step instructions to take the Mihrab application live on **`https://theboxux.com`**.
-
----
-
-## 1. Quick Architecture & Configuration Summary
-
-- **App Framework:** Next.js 16 (App Router + Turbopack/Webpack)
-- **Target URL:** `https://theboxux.com`
-- **Port:** `3000` (internal / upstream)
-- **Node.js Engine:** `>= 20.x`
-- **Environment Variables:**
-  - `SITE_URL=https://theboxux.com`
-  - `ADMIN_PASSWORD=mihrab2026`
-  - `NEXT_PUBLIC_ADMIN_WHATSAPP=918980643688`
+Target URL: **`https://mihrab-masjid.theboxux.com`**
 
 ---
 
-## 2. Option A: Deploy to Vercel (Fastest & Recommended)
+## 1. Environment Configuration
 
-Vercel is the native platform for Next.js and includes free automated SSL, edge caching, and global CDN with Mumbai (`bom1`) edge nodes.
+The project is pre-configured with:
+- `SITE_URL=https://mihrab-masjid.theboxux.com`
+- `ADMIN_PASSWORD=mihrab2026`
+- `NEXT_PUBLIC_ADMIN_WHATSAPP=918980643688`
 
-### Step 1: Push Project to GitHub
-```bash
-git add .
-git commit -m "feat: production ready for theboxux.com"
-git branch -M main
-git remote add origin https://github.com/<YOUR_GITHUB_USER>/mihrab.git
-git push -u origin main
-```
+---
 
-### Step 2: Import into Vercel
-1. Log in to [vercel.com](https://vercel.com).
-2. Click **"Add New"** > **"Project"** and select your GitHub repository.
-3. Under **Environment Variables**, add:
-   - `SITE_URL` = `https://theboxux.com`
-   - `ADMIN_PASSWORD` = `mihrab2026` (or your chosen secure password)
+## 2. Option A: cPanel / Shared Hosting (via "Setup Node.js App")
+
+Since you have already created the subdomain **`mihrab-masjid.theboxux.com`** in cPanel:
+
+### Step 1: Upload Project Files
+1. Open cPanel **File Manager**.
+2. Navigate to the document root folder created for your subdomain (e.g. `public_html/mihrab-masjid` or `/mihrab-masjid.theboxux.com`).
+3. Upload and extract **`mihrab-project.zip`** directly into that directory.
+4. Ensure the `.env.production` file is renamed or copied as `.env` in that root folder.
+
+### Step 2: Configure Node.js App in cPanel
+1. In cPanel, search for **"Setup Node.js App"** (or **"Node.js Selector"**).
+2. Click **Create Application**:
+   - **Node.js version:** Select `20.x` (or highest available `18+` or `20+`).
+   - **Application mode:** `Production`
+   - **Application root:** The folder path where you uploaded the files (e.g. `mihrab-masjid.theboxux.com` or `public_html/mihrab-masjid`).
+   - **Application URL:** Select `mihrab-masjid.theboxux.com`.
+   - **Application startup file:** `server.js`
+3. Click **Create**.
+
+### Step 3: Install Packages and Build
+1. Click **"Run NPM Install"** in the cPanel Node.js dashboard.
+2. In the terminal or via the command runner, run:
+   ```bash
+   npm run build
+   ```
+3. Click **"Restart"** application.
+4. Visit `https://mihrab-masjid.theboxux.com`!
+
+---
+
+## 3. Option B: Vercel (Edge Cloud Hosting)
+
+If you host via Vercel:
+
+### Step 1: Push & Deploy
+1. Push this project to GitHub.
+2. Import the repository into [Vercel](https://vercel.com).
+3. Under **Environment Variables**, set:
+   - `SITE_URL` = `https://mihrab-masjid.theboxux.com`
+   - `ADMIN_PASSWORD` = `mihrab2026`
    - `NEXT_PUBLIC_ADMIN_WHATSAPP` = `918980643688`
 4. Click **Deploy**.
 
-### Step 3: Connect `theboxux.com` Domain
-1. In your Vercel project dashboard, navigate to **Settings** > **Domains**.
-2. Type `theboxux.com` and click **Add**.
-3. Vercel will prompt you to configure your DNS records at your domain registrar (GoDaddy, Namecheap, Cloudflare, Hostinger, etc.):
-
-| Record Type | Host / Name | Target / Value | TTL |
-|---|---|---|---|
-| **A** | `@` | `76.76.21.21` | Automatic / 300 |
-| **CNAME** | `www` | `cname.vercel-dns.com` | Automatic / 300 |
-
-*Once DNS propagates (usually 5 to 30 minutes), Vercel automatically issues a free Let's Encrypt SSL certificate.*
+### Step 2: Connect Subdomain
+1. In Vercel Project > **Settings** > **Domains**.
+2. Enter: `mihrab-masjid.theboxux.com`.
+3. In your DNS manager (where `theboxux.com` DNS is managed), add this CNAME record:
+   - **Type:** `CNAME`
+   - **Name:** `mihrab-masjid`
+   - **Target / Value:** `cname.vercel-dns.com`
 
 ---
 
-## 3. Option B: Deploy to VPS / Cloud Server (Ubuntu / Linux)
+## 4. Option C: Ubuntu VPS with Nginx & PM2
 
-If you have a Linux VPS (DigitalOcean, Hostinger VPS, Linode, AWS EC2, Hetzner), you can host with PM2 and Nginx reverse proxy.
-
-### Step 1: Install Node.js 20 & PM2
+### Step 1: Clone & Run
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs nginx git
-sudo npm install -g pm2
-```
-
-### Step 2: Clone & Build
-```bash
-cd /var/www
-git clone https://github.com/<YOUR_GITHUB_USER>/mihrab.git
-cd mihrab
+cd /var/www/mihrab-masjid
+git clone <YOUR_REPO> .
 npm ci
 npm run build
-```
-
-### Step 3: Run with PM2
-```bash
-pm2 start npm --name "mihrab" -- start
+pm2 start server.js --name "mihrab-masjid"
 pm2 save
-pm2 startup
 ```
 
-### Step 4: Configure Nginx Reverse Proxy
-Edit `/etc/nginx/sites-available/theboxux.com`:
+### Step 2: Nginx Virtual Host
 ```nginx
 server {
-    server_name theboxux.com www.theboxux.com;
+    server_name mihrab-masjid.theboxux.com;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -95,38 +93,10 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
     }
 }
 ```
 
-Enable site & SSL:
 ```bash
-sudo ln -s /etc/nginx/sites-available/theboxux.com /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-sudo certbot --nginx -d theboxux.com -d www.theboxux.com
+sudo certbot --nginx -d mihrab-masjid.theboxux.com
 ```
-
----
-
-## 4. Option C: Run via Docker
-
-```bash
-# Build the production image
-docker build -t mihrab-app .
-
-# Run container on port 3000
-docker run -d -p 3000:3000 --name mihrab -v $(pwd)/data:/app/data mihrab-app
-```
-
----
-
-## 5. Instant Test Right Now (Temporary Public HTTPS Tunnel)
-
-To test on your mobile phone or share with other people right this moment without waiting for DNS propagation:
-```bash
-npx untun tunnel http://localhost:3000
-```
-This produces a live public HTTPS address that forwards all traffic directly to your running local instance.
-
