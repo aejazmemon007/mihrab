@@ -50,7 +50,7 @@ export function HomeDirectory({
         ? `સલામ! મારે અમારી મસ્જિદ માટે Mihrab પર પેજ બનાવવું છે.\n\n• મસ્જિદનું નામ: ${formData.masjidName.trim()}\n• વિસ્તાર: ${formData.area.trim()}\n• સંપર્કકર્તા: ${formData.contactPerson.trim() || "ટ્રસ્ટી / કમિટી"}\n• વોટ્સએપ નંબર: ${formData.phone.trim()}\n\nકૃપા કરીને અમને ૨૪ કલાકમાં ફ્રી પ્રિવ્યૂ લિંક મોકલો.`
         : `Salam! I would like to get a page on Mihrab for our masjid.\n\n• Masjid Name: ${formData.masjidName.trim()}\n• Area: ${formData.area.trim()}\n• Contact Person: ${formData.contactPerson.trim() || "Trustee / Committee"}\n• WhatsApp Number: ${formData.phone.trim()}\n\nPlease generate a free preview link for us within 24 hours.`;
 
-    const adminPhone = (process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "919000000000").replace(/\D/g, "");
+    const adminPhone = (process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "918980643688").replace(/\D/g, "");
     const formattedPhone = adminPhone.length === 10 ? `91${adminPhone}` : adminPhone;
     const targetUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(
       message
@@ -86,7 +86,7 @@ export function HomeDirectory({
     lang === "gu"
       ? "સલામ, મારે અમારી મસ્જિદ માટે Mihrab પર પેજ બનાવવું છે."
       : "Salam, I would like to get a webpage on Mihrab for our masjid.";
-  const rawAdminPhone = (process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "919000000000").replace(/\D/g, "");
+  const rawAdminPhone = (process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "918980643688").replace(/\D/g, "");
   const adminPhone = rawAdminPhone.length === 10 ? `91${rawAdminPhone}` : rawAdminPhone;
   const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(
     whatsappMessage

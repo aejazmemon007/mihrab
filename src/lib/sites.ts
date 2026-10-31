@@ -301,5 +301,10 @@ export function phoneDigits(value: string): string {
 }
 
 export function siteUrl(): string {
-  return (process.env.SITE_URL?.trim() || "http://localhost:3000").replace(/\/$/, "");
+  return (
+    process.env.SITE_URL?.trim() ||
+    (process.env.NODE_ENV === "production"
+      ? "https://mihrab-masjid.theboxux.com"
+      : "http://localhost:3000")
+  ).replace(/\/$/, "");
 }

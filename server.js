@@ -25,3 +25,4 @@ app.prepare().then(() => {
     console.log(`> Mihrab server ready on port ${port}`);
   });
 });
+
