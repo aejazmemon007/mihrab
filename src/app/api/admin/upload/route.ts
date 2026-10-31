@@ -60,11 +60,13 @@ export async function POST(request: Request) {
         try {
           const blob = await put(`photos/${filename}`, file, {
             access: "public",
+            allowOverwrite: true,
           });
           blobUrl = blob.url;
         } catch {
           const blob = await put(`photos/${filename}`, file, {
             access: "private",
+            allowOverwrite: true,
           });
           blobUrl = blob.url;
         }

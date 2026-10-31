@@ -238,6 +238,7 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
         await put("data/sites.json", dataString, {
           access: "private",
           addRandomSuffix: false,
+          allowOverwrite: true,
           cacheControlMaxAge: 0,
         });
       } catch (errPriv: unknown) {
@@ -245,6 +246,7 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
           await put("data/sites.json", dataString, {
             access: "public",
             addRandomSuffix: false,
+            allowOverwrite: true,
           });
         } catch (errPub: unknown) {
           blobError = `Private failed: ${errPriv instanceof Error ? errPriv.message : String(errPriv)} | Public failed: ${errPub instanceof Error ? errPub.message : String(errPub)}`;
@@ -289,11 +291,14 @@ export async function deleteSite(slug: string): Promise<boolean> {
         await put("data/sites.json", dataString, {
           access: "private",
           addRandomSuffix: false,
+          allowOverwrite: true,
+          cacheControlMaxAge: 0,
         });
       } catch {
         await put("data/sites.json", dataString, {
           access: "public",
           addRandomSuffix: false,
+          allowOverwrite: true,
         });
       }
     } catch (err) {
