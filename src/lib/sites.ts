@@ -148,7 +148,7 @@ export async function getAllSites(): Promise<Site[]> {
 
       // Try reading private first (matches user's private store)
       try {
-        const file = await get("data/sites.json", { access: "private" });
+        const file = await get("data/sites.json", { access: "private", useCache: false });
         if (file && file.statusCode === 200 && file.stream) {
           content = await new Response(file.stream as unknown as BodyInit).text();
         }
@@ -228,6 +228,7 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
   const dataString = JSON.stringify(sites, null, 2);
 
   // 1. If Vercel Blob is configured, save to Blob (supports both private and public stores)
+  let blobError: string | null = null;
   if (hasBlobStorage()) {
     try {
       const { put } = await import("@vercel/blob");
@@ -235,16 +236,25 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
         await put("data/sites.json", dataString, {
           access: "private",
           addRandomSuffix: false,
+          cacheControlMaxAge: 0,
         });
-      } catch {
-        await put("data/sites.json", dataString, {
-          access: "public",
-          addRandomSuffix: false,
-        });
+      } catch (errPriv: unknown) {
+        try {
+          await put("data/sites.json", dataString, {
+            access: "public",
+            addRandomSuffix: false,
+          });
+        } catch (errPub: unknown) {
+          blobError = `Private failed: ${errPriv instanceof Error ? errPriv.message : String(errPriv)} | Public failed: ${errPub instanceof Error ? errPub.message : String(errPub)}`;
+          console.error("Blob put failed:", blobError);
+        }
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      blobError = `Import failed: ${err instanceof Error ? err.message : String(err)}`;
       console.error("Failed to save to Vercel Blob:", err);
     }
+  } else {
+    blobError = "hasBlobStorage() returned false - no BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID in env";
   }
 
   // 2. Also save to local or /tmp file
@@ -367,7 +377,7 @@ function sanitizeSite(raw: Partial<Site>): Site | null {
       jumuah: (raw.azanTimes?.jumuah ?? "").trim() || deriveAzanTime(raw.times?.jumuah ?? "", "jumuah"),
     },
     ramadan: {
-      enabled: typeof raw.ramadan?.enabled === "boolean" ? raw.ramadan.enabled : false,
+      enabled: Boolean(raw.ramadan?.enabled),
       tarawih: (raw.ramadan?.tarawih ?? "").trim(),
       qiyam: (raw.ramadan?.qiyam ?? "").trim(),
       note: {

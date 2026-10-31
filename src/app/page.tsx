@@ -4,6 +4,7 @@ import { HomeDirectory } from "@/components/HomeDirectory";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export const metadata: Metadata = {
   title: "Mihrab Ahmedabad – જમાતના સમય અને મસ્જિદ ડિરેક્ટરી",

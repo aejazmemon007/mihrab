@@ -15,7 +15,13 @@ export async function GET(request: Request) {
   }
 
   const sites = await getAllSites();
-  return NextResponse.json({ sites });
+  const debug = {
+    hasToken: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    tokenPrefix: process.env.BLOB_READ_WRITE_TOKEN ? process.env.BLOB_READ_WRITE_TOKEN.slice(0, 15) : "none",
+    hasStoreId: Boolean(process.env.BLOB_STORE_ID),
+    isVercel: Boolean(process.env.VERCEL),
+  };
+  return NextResponse.json({ sites, debug });
 }
 
 export async function POST(request: Request) {

@@ -5,13 +5,9 @@ import { MasjidPage, masjidMetadata } from "@/components/MasjidPage";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 type Props = { params: Promise<{ slug: string }> };
-
-export async function generateStaticParams() {
-  const sites = await getAllSites();
-  return sites.map((s) => ({ slug: s.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

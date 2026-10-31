@@ -787,25 +787,38 @@ export function AdminDashboard({ sites: initialSites }: { sites: Site[] }) {
                         </p>
                       </div>
                     </div>
-                    <label className={`ramadan-toggle-pill ${formData.ramadan?.enabled ? "active" : "disabled"}`}>
-                      <input
-                        type="checkbox"
-                        checked={Boolean(formData.ramadan?.enabled)}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            ramadan: {
-                              ...(formData.ramadan || { tarawih: "9:00", qiyam: "3:30", note: { en: "", gu: "" } }),
-                              enabled: e.target.checked,
-                            },
-                          })
-                        }
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={Boolean(formData.ramadan?.enabled)}
+                      onClick={() => {
+                        const nextVal = !formData.ramadan?.enabled;
+                        setFormData({
+                          ...formData,
+                          ramadan: {
+                            ...(formData.ramadan || { tarawih: "9:00", qiyam: "3:30", note: { en: "", gu: "" } }),
+                            enabled: nextVal,
+                          },
+                        });
+                      }}
+                      className={`ramadan-toggle-pill ${formData.ramadan?.enabled ? "active" : "disabled"}`}
+                    >
+                      <span
+                        className="toggle-switch-dot"
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                          borderRadius: "50%",
+                          backgroundColor: formData.ramadan?.enabled ? "#fbbf24" : "#64748b",
+                          display: "inline-block",
+                          boxShadow: formData.ramadan?.enabled ? "0 0 8px #fbbf24" : "none",
+                          transition: "all 0.2s ease",
+                        }}
                       />
-                      <span className="toggle-indicator"></span>
                       <span className="toggle-text">
                         {formData.ramadan?.enabled ? "🌙 Active (સક્રિય) — Live on Site" : "⚪ Disabled (બંધ) — Hidden"}
                       </span>
-                    </label>
+                    </button>
                   </div>
 
                   {!formData.ramadan?.enabled && (
