@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { getAllSites, getSite } from "@/lib/sites";
 import { MasjidPage, masjidMetadata } from "@/components/MasjidPage";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Props = { params: Promise<{ slug: string }> };
 

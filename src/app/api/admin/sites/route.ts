@@ -54,6 +54,9 @@ export async function POST(request: Request) {
 
     // Revalidate paths across the site so changes appear instantly
     revalidatePath("/", "layout");
+    revalidatePath(`/${saved.slug}`);
+    revalidatePath(`/${saved.slug}/en`);
+    revalidatePath(`/${saved.slug}/poster`);
 
     const allSites = await getAllSites();
     return NextResponse.json({ success: true, site: saved, sites: allSites });

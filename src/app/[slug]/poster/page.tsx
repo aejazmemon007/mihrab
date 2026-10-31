@@ -4,7 +4,8 @@ import { getAllSites, getSite } from "@/lib/sites";
 import { PRAYERS, T, displayDate, displayTime, pick } from "@/lib/i18n";
 import { PosterClientView } from "./PosterClientView";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Props = { params: Promise<{ slug: string }> };
 
