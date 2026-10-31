@@ -1,5 +1,6 @@
 import "server-only";
 import { readFile, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 /** How often (seconds) pages revalidate in production if static. */
@@ -59,7 +60,31 @@ export type Site = {
   pattern: SitePattern;
 };
 
-const SITES_FILE_PATH = path.join(process.cwd(), "data", "sites.json");
+const IS_VERCEL = Boolean(process.env.VERCEL);
+const LOCAL_SITES_PATH = path.join(process.cwd(), "data", "sites.json");
+const TMP_SITES_PATH = path.join("/tmp", "sites.json");
+
+function getSitesFilePath(): string {
+  if (IS_VERCEL) {
+    return TMP_SITES_PATH;
+  }
+  return LOCAL_SITES_PATH;
+}
+
+async function ensureFileInitialized(): Promise<string> {
+  const filePath = getSitesFilePath();
+  if (IS_VERCEL && !existsSync(filePath)) {
+    try {
+      if (existsSync(LOCAL_SITES_PATH)) {
+        const initial = await readFile(LOCAL_SITES_PATH, "utf8");
+        await writeFile(TMP_SITES_PATH, initial, "utf8");
+      }
+    } catch (e) {
+      console.warn("Could not copy initial sites.json to /tmp:", e);
+    }
+  }
+  return filePath;
+}
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_PATTERN = /^[a-z0-9][a-z0-9._-]*\.(jpe?g|png|webp)$/i;
@@ -107,8 +132,29 @@ export function deriveAzanTime(jamaatTime: string, prayer: string): string {
 }
 
 export async function getAllSites(): Promise<Site[]> {
+  // 1. Try Vercel Blob first if token is available
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const { list } = await import("@vercel/blob");
+      const { blobs } = await list({ prefix: "data/sites.json", limit: 1 });
+      if (blobs.length > 0) {
+        const res = await fetch(blobs[0].url, { cache: "no-store" });
+        if (res.ok) {
+          const parsed = await res.json();
+          if (Array.isArray(parsed)) {
+            return parsed.map(sanitizeSite).filter((s): s is Site => s !== null);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Vercel Blob fetch failed, falling back to file:", err);
+    }
+  }
+
+  // 2. Fallback to local or /tmp file
   try {
-    const raw = await readFile(SITES_FILE_PATH, "utf8");
+    const filePath = await ensureFileInitialized();
+    const raw = await readFile(filePath, "utf8");
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
       return parsed.map(sanitizeSite).filter((s): s is Site => s !== null);
@@ -117,7 +163,6 @@ export async function getAllSites(): Promise<Site[]> {
   } catch (err: unknown) {
     const nodeErr = err as { code?: string };
     if (nodeErr.code === "ENOENT") {
-      // Default fallback if file does not exist yet
       return [];
     }
     console.error("Failed to read sites.json:", err);
@@ -157,7 +202,30 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
     sites.push(updated);
   }
 
-  await writeFile(SITES_FILE_PATH, JSON.stringify(sites, null, 2), "utf8");
+  const dataString = JSON.stringify(sites, null, 2);
+
+  // 1. If Vercel Blob is configured, save to Blob (Permanent cloud persistence)
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const { put } = await import("@vercel/blob");
+      await put("data/sites.json", dataString, {
+        access: "public",
+        addRandomSuffix: false,
+        cacheControlMaxAge: 0,
+      });
+    } catch (err) {
+      console.error("Failed to save to Vercel Blob:", err);
+    }
+  }
+
+  // 2. Also save to local or /tmp file
+  try {
+    const filePath = await ensureFileInitialized();
+    await writeFile(filePath, dataString, "utf8");
+  } catch (err) {
+    console.error("Failed to write to file system:", err);
+  }
+
   return updated;
 }
 
@@ -168,7 +236,31 @@ export async function deleteSite(slug: string): Promise<boolean> {
   if (filtered.length === sites.length) {
     return false;
   }
-  await writeFile(SITES_FILE_PATH, JSON.stringify(filtered, null, 2), "utf8");
+
+  const dataString = JSON.stringify(filtered, null, 2);
+
+  // 1. If Vercel Blob is configured, update Blob
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const { put } = await import("@vercel/blob");
+      await put("data/sites.json", dataString, {
+        access: "public",
+        addRandomSuffix: false,
+        cacheControlMaxAge: 0,
+      });
+    } catch (err) {
+      console.error("Failed to delete from Vercel Blob:", err);
+    }
+  }
+
+  // 2. Also save to local or /tmp file
+  try {
+    const filePath = await ensureFileInitialized();
+    await writeFile(filePath, dataString, "utf8");
+  } catch (err) {
+    console.error("Failed to write to file system:", err);
+  }
+
   return true;
 }
 

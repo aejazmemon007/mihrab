@@ -502,6 +502,22 @@ export function AdminDashboard({ sites: initialSites }: { sites: Site[] }) {
           >
             {showPreview ? "📱 Hide Preview" : "📱 Show Small Preview"}
           </button>
+          <button
+            type="button"
+            className="admin-preview-toggle-btn"
+            onClick={() => {
+              const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sites, null, 2));
+              const downloadAnchor = document.createElement("a");
+              downloadAnchor.setAttribute("href", dataStr);
+              downloadAnchor.setAttribute("download", `sites-${new Date().toISOString().slice(0, 10)}.json`);
+              document.body.appendChild(downloadAnchor);
+              downloadAnchor.click();
+              downloadAnchor.remove();
+            }}
+            title="Download full sites backup JSON"
+          >
+            💾 Backup JSON
+          </button>
           <button className="admin-add-btn" onClick={startCreateNew}>
             + Add New Masjid
           </button>

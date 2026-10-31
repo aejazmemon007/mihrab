@@ -52,8 +52,29 @@ export async function POST(request: Request) {
     const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9-]/g, "") || "masjid";
     const filename = `${cleanSlug}-banner-${Date.now()}.${safeExt}`;
 
+    // If Vercel Blob is configured, upload directly to Vercel CDN
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const { put } = await import("@vercel/blob");
+        const blob = await put(`photos/${filename}`, file, {
+          access: "public",
+        });
+        return NextResponse.json({
+          success: true,
+          filename,
+          url: blob.url,
+        });
+      } catch (err) {
+        console.error("Vercel Blob upload failed:", err);
+      }
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
-    const uploadDir = path.join(process.cwd(), "public", "photos");
+    const isVercel = Boolean(process.env.VERCEL);
+    const uploadDir = isVercel
+      ? path.join("/tmp", "photos")
+      : path.join(process.cwd(), "public", "photos");
+
     await fs.mkdir(uploadDir, { recursive: true });
 
     const targetFilePath = path.join(uploadDir, filename);
