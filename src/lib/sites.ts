@@ -135,15 +135,30 @@ export async function getAllSites(): Promise<Site[]> {
   // 1. Try Vercel Blob first if token is available
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
-      const { list } = await import("@vercel/blob");
-      const { blobs } = await list({ prefix: "data/sites.json", limit: 1 });
-      if (blobs.length > 0) {
-        const res = await fetch(blobs[0].url, { cache: "no-store" });
-        if (res.ok) {
-          const parsed = await res.json();
-          if (Array.isArray(parsed)) {
-            return parsed.map(sanitizeSite).filter((s): s is Site => s !== null);
+      const { get, list } = await import("@vercel/blob");
+      let content = "";
+
+      // Try reading private first (matches user's private store)
+      try {
+        const file = await get("data/sites.json", { access: "private" });
+        if (file && file.statusCode === 200 && file.stream) {
+          content = await new Response(file.stream as unknown as BodyInit).text();
+        }
+      } catch {
+        // Fallback to list/fetch for public store
+        const { blobs } = await list({ prefix: "data/sites.json", limit: 1 });
+        if (blobs.length > 0) {
+          const res = await fetch(blobs[0].url, { cache: "no-store" });
+          if (res.ok) {
+            content = await res.text();
           }
+        }
+      }
+
+      if (content) {
+        const parsed = JSON.parse(content);
+        if (Array.isArray(parsed)) {
+          return parsed.map(sanitizeSite).filter((s): s is Site => s !== null);
         }
       }
     } catch (err) {
@@ -204,15 +219,21 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
 
   const dataString = JSON.stringify(sites, null, 2);
 
-  // 1. If Vercel Blob is configured, save to Blob (Permanent cloud persistence)
+  // 1. If Vercel Blob is configured, save to Blob (supports both private and public stores)
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
       const { put } = await import("@vercel/blob");
-      await put("data/sites.json", dataString, {
-        access: "public",
-        addRandomSuffix: false,
-        cacheControlMaxAge: 0,
-      });
+      try {
+        await put("data/sites.json", dataString, {
+          access: "private",
+          addRandomSuffix: false,
+        });
+      } catch {
+        await put("data/sites.json", dataString, {
+          access: "public",
+          addRandomSuffix: false,
+        });
+      }
     } catch (err) {
       console.error("Failed to save to Vercel Blob:", err);
     }
@@ -243,11 +264,17 @@ export async function deleteSite(slug: string): Promise<boolean> {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
       const { put } = await import("@vercel/blob");
-      await put("data/sites.json", dataString, {
-        access: "public",
-        addRandomSuffix: false,
-        cacheControlMaxAge: 0,
-      });
+      try {
+        await put("data/sites.json", dataString, {
+          access: "private",
+          addRandomSuffix: false,
+        });
+      } catch {
+        await put("data/sites.json", dataString, {
+          access: "public",
+          addRandomSuffix: false,
+        });
+      }
     } catch (err) {
       console.error("Failed to delete from Vercel Blob:", err);
     }
