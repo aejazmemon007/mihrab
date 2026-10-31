@@ -214,5 +214,80 @@
     "mapLink": "https://maps.google.com/",
     "photo": "default-masjid.jpg",
     "updatedOn": "2026-10-17"
+  },
+  {
+    "slug": "madina-masjid",
+    "status": "live",
+    "theme": "noor",
+    "plan": "basic",
+    "pattern": "noor",
+    "name": {
+      "en": "Madina Masjid",
+      "gu": "મદીના મસ્જિદ"
+    },
+    "area": {
+      "en": "Danilimda Gam",
+      "gu": "દાણીલીમડા ગામ"
+    },
+    "address": {
+      "en": "Danilimda Gam, Ahmedabad",
+      "gu": "દાણીલીમડા ગામ, અમદાવાદ"
+    },
+    "times": {
+      "fajr": "5:30",
+      "zuhr": "1:30",
+      "asr": "5:00",
+      "maghrib": "Sunset",
+      "isha": "8:30",
+      "jumuah": "1:45"
+    },
+    "azanTimes": {
+      "fajr": "5:00",
+      "zuhr": "1:00",
+      "asr": "4:45",
+      "maghrib": "Sunset",
+      "isha": "8:15",
+      "jumuah": "1:15"
+    },
+    "ramadan": {
+      "enabled": false,
+      "tarawih": "9:00",
+      "qiyam": "3:30",
+      "note": {
+        "en": "",
+        "gu": ""
+      }
+    },
+    "timesNote": {
+      "en": "",
+      "gu": ""
+    },
+    "announcement": {
+      "en": "",
+      "gu": ""
+    },
+    "announcementUntil": "",
+    "about": {
+      "en": "Serving the community of Danilimda with daily jamaat prayers, education, and community services.",
+      "gu": "રોજિંદી જમાત નમાઝ અને દીની તાલીમ સાથે દાણીલીમડા વિસ્તારની સેવા કરતી મસ્જિદ."
+    },
+    "facilities": [
+      "wuzu",
+      "parking",
+      "ladies",
+      "madrasa",
+      "wheelchair",
+      "library"
+    ],
+    "phonePublic": "",
+    "whatsappPublic": "",
+    "whatsappGroupLink": "",
+    "whatsappGroupText": {
+      "en": "",
+      "gu": ""
+    },
+    "mapLink": "",
+    "photo": "default-masjid.jpg",
+    "updatedOn": "2026-10-31"
   }
 ]
