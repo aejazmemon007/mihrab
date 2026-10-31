@@ -53,16 +53,25 @@ export async function POST(request: Request) {
     const filename = `${cleanSlug}-banner-${Date.now()}.${safeExt}`;
 
     // If Vercel Blob is configured, upload directly to Vercel CDN
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
+    if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) {
       try {
         const { put } = await import("@vercel/blob");
-        const blob = await put(`photos/${filename}`, file, {
-          access: "public",
-        });
+        let blobUrl = "";
+        try {
+          const blob = await put(`photos/${filename}`, file, {
+            access: "public",
+          });
+          blobUrl = blob.url;
+        } catch {
+          const blob = await put(`photos/${filename}`, file, {
+            access: "private",
+          });
+          blobUrl = blob.url;
+        }
         return NextResponse.json({
           success: true,
           filename,
-          url: blob.url,
+          url: blobUrl,
         });
       } catch (err) {
         console.error("Vercel Blob upload failed:", err);

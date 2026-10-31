@@ -131,9 +131,17 @@ export function deriveAzanTime(jamaatTime: string, prayer: string): string {
   return `${displayH}:${displayM}`;
 }
 
+function hasBlobStorage(): boolean {
+  return Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN ||
+    process.env.BLOB_STORE_ID ||
+    process.env.VERCEL_BLOB_STORE_ID
+  );
+}
+
 export async function getAllSites(): Promise<Site[]> {
-  // 1. Try Vercel Blob first if token is available
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  // 1. Try Vercel Blob first if token or store id is available
+  if (hasBlobStorage()) {
     try {
       const { get, list } = await import("@vercel/blob");
       let content = "";
@@ -220,7 +228,7 @@ export async function saveSite(site: Site, oldSlug?: string): Promise<Site> {
   const dataString = JSON.stringify(sites, null, 2);
 
   // 1. If Vercel Blob is configured, save to Blob (supports both private and public stores)
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasBlobStorage()) {
     try {
       const { put } = await import("@vercel/blob");
       try {
@@ -261,7 +269,7 @@ export async function deleteSite(slug: string): Promise<boolean> {
   const dataString = JSON.stringify(filtered, null, 2);
 
   // 1. If Vercel Blob is configured, update Blob
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasBlobStorage()) {
     try {
       const { put } = await import("@vercel/blob");
       try {
