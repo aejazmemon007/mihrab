@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "noor-masjid",
+    "status": "live",
+    "theme": "noor",
+    "plan": "premium",
+    "pattern": "noor",
+    "name": {
+      "en": "Noor Masjid",
+      "gu": "નૂર મસ્જિદ"
+    },
+    "area": {
+      "en": "Juhapura",
+      "gu": "કાજલ પાર્ક, જુહાપુરા"
+    },
+    "address": {
+      "en": "Kajal Park, Juhapura, Ahmedabad",
+      "gu": "કાજલ પાર્ક, જુહાપુરા, અમદાવાદ"
+    },
+    "times": {
+      "fajr": "5:30",
+      "zuhr": "1:30",
+      "asr": "5:00",
+      "maghrib": "Sunset",
+      "isha": "8:30",
+      "jumuah": "1:45"
+    },
+    "azanTimes": {
+      "fajr": "5:15",
+      "zuhr": "1:15",
+      "asr": "4:45",
+      "maghrib": "Sunset",
+      "isha": "8:15",
+      "jumuah": "1:30"
+    },
+    "ramadan": {
+      "enabled": false,
+      "tarawih": "9:00",
+      "qiyam": "3:30",
+      "note": {
+        "en": "20 Rakat Tarawih • Khatmul Quran on 27th night",
+        "gu": "20 રકાત તરાવીહ • 27મી રાત્રે ખતમ-એ-કુરાન"
+      }
+    },
+    "timesNote": {
+      "en": "Fajr 5:30 from 16 Oct",
+      "gu": "ફજર 5:30 તા. 16 ઑક્ટોબરથી"
+    },
+    "announcement": {
+      "en": "Dars every Friday after Isha",
+      "gu": "દર શુક્રવારે ઈશા પછી દર્સ"
+    },
+    "announcementUntil": "",
+    "about": {
+      "en": "Central sanctuary serving the community with daily jamaat prayers, Quranic classes, and weekly educational programs.",
+      "gu": "રોજિંદી નમાઝ, કુરાન વર્ગો અને સાપ્તાહિક તાલીમી કાર્યક્રમો સાથે સમુદાયની સેવા કરતું કેન્દ્રિય મસ્જિદ."
+    },
+    "facilities": [
+      "wuzu",
+      "ladies",
+      "madrasa",
+      "parking"
+    ],
+    "phonePublic": "+91 98765 43210",
+    "whatsappPublic": "+91 98765 43210",
+    "whatsappGroupLink": "https://chat.whatsapp.com/NoorMasjidAhmedabad",
+    "whatsappGroupText": {
+      "en": "Join our official community WhatsApp group for daily jamaat times and Islamic reminders.",
+      "gu": "દૈનિક જમાતનો સમય અને મસ્જિદની સૂચનાઓ માટે અમારા સત્તાવાર વોટ્સએપ ગ્રૂપમાં જોડાઓ."
+    },
+    "mapLink": "https://maps.google.com/",
+    "photo": "noor-masjid.jpg",
+    "updatedOn": "2026-10-31"
+  },
+  {
+    "slug": "usman-bin-affan",
+    "status": "live",
+    "theme": "andalus",
+    "plan": "basic",
+    "pattern": "midnight",
+    "name": {
+      "en": "Masjid Usman Bin Affan",
+      "gu": "ઉસ્માન બિન અફ્ફાન મસ્જિદ"
+    },
+    "area": {
+      "en": "Sarkhej",
+      "gu": "સરખેજ"
+    },
+    "address": {
+      "en": "Sarkhej Highway, Ahmedabad",
+      "gu": "સરખેજ હાઇવે, અમદાવાદ"
+    },
+    "times": {
+      "fajr": "5:30",
+      "zuhr": "1:30",
+      "asr": "5:00",
+      "maghrib": "Sunset",
+      "isha": "8:30",
+      "jumuah": "1:45"
+    },
+    "azanTimes": {
+      "fajr": "5:15",
+      "zuhr": "1:15",
+      "asr": "4:45",
+      "maghrib": "Sunset",
+      "isha": "8:15",
+      "jumuah": "1:30"
+    },
+    "ramadan": {
+      "enabled": false,
+      "tarawih": "9:00",
+      "qiyam": "3:30",
+      "note": {
+        "en": "20 Rakat Tarawih • Khatmul Quran on 27th night",
+        "gu": "20 રકાત તરાવીહ • 27મી રાત્રે ખતમ-એ-કુરાન"
+      }
+    },
+    "timesNote": {
+      "en": "",
+      "gu": ""
+    },
+    "announcement": {
+      "en": "Dars every Friday after Isha",
+      "gu": "દર શુક્રવારે ઈશા પછી દર્સ"
+    },
+    "announcementUntil": "",
+    "about": {
+      "en": "Community masjid offering prayer facilities, Quran classes and community services.",
+      "gu": "નમાઝની સુવિધા, કુરાન વર્ગો અને સામુદાયિક સેવાઓ પૂરી પાડતી મસ્જિદ."
+    },
+    "facilities": [
+      "wuzu",
+      "parking",
+      "madrasa"
+    ],
+    "phonePublic": "+91 98765 43211",
+    "whatsappPublic": "+91 98765 43211",
+    "whatsappGroupLink": "https://chat.whatsapp.com/UsmanBinAffanMasjid",
+    "whatsappGroupText": {
+      "en": "Join our official community WhatsApp group for daily jamaat times and Islamic reminders.",
+      "gu": "દૈનિક જમાતનો સમય અને મસ્જિદની સૂચનાઓ માટે અમારા સત્તાવાર વોટ્સએપ ગ્રૂપમાં જોડાઓ."
+    },
+    "mapLink": "https://maps.google.com/",
+    "photo": "usman-bin-affan-banner-1793370768908.jpg",
+    "updatedOn": "2026-10-30"
+  },
+  {
+    "slug": "bilal-ahmed-masjid",
+    "status": "live",
+    "theme": "noor",
+    "plan": "free",
+    "pattern": "noor",
+    "name": {
+      "en": "Bilal Ahmed Masjid",
+      "gu": "બિલાલ અહમદ મસ્જિદ"
+    },
+    "area": {
+      "en": "Danilimda",
+      "gu": "દાણીલીમડા"
+    },
+    "address": {
+      "en": "Danilimda Cross Roads, Ahmedabad",
+      "gu": "દાણીલીમડા ચાર રસ્તા, અમદાવાદ"
+    },
+    "times": {
+      "fajr": "5:30",
+      "zuhr": "1:30",
+      "asr": "5:00",
+      "maghrib": "Sunset",
+      "isha": "8:30",
+      "jumuah": "1:45"
+    },
+    "azanTimes": {
+      "fajr": "5:15",
+      "zuhr": "1:15",
+      "asr": "4:45",
+      "maghrib": "Sunset",
+      "isha": "8:15",
+      "jumuah": "1:30"
+    },
+    "ramadan": {
+      "enabled": true,
+      "tarawih": "8:45",
+      "qiyam": "3:45",
+      "note": {
+        "en": "Tarawih after Isha prayer • Hafiz Mohammed Zubair",
+        "gu": "ઈશા પછી તરાવીહ • હાફિઝ મોહમ્મદ ઝુબૈર"
+      }
+    },
+    "timesNote": {
+      "en": "",
+      "gu": ""
+    },
+    "announcement": {
+      "en": "Weekly Tafseer program on Sunday after Maghrib",
+      "gu": "રવિવારે મગરીબ પછી સાપ્તાહિક તફસીર કાર્યક્રમ"
+    },
+    "announcementUntil": "",
+    "about": {
+      "en": "Historic neighborhood masjid serving local residents with regular jamaat prayers and spiritual programs.",
+      "gu": "નિયમિત જમાત નમાઝ અને આધ્યાત્મિક કાર્યક્રમો સાથે સ્થાનિક રહેવાસીઓની સેવા કરતી મસ્જિદ."
+    },
+    "facilities": [
+      "wuzu",
+      "parking"
+    ],
+    "phonePublic": "+91 98765 43212",
+    "whatsappPublic": "+91 98765 43212",
+    "whatsappGroupLink": "https://chat.whatsapp.com/BilalAhmedMasjid",
+    "whatsappGroupText": {
+      "en": "Join our official community WhatsApp group for daily jamaat times and Islamic reminders.",
+      "gu": "દૈનિક જમાતનો સમય અને મસ્જિદની સૂચનાઓ માટે અમારા સત્તાવાર વોટ્સએપ ગ્રૂપમાં જોડાઓ."
+    },
+    "mapLink": "https://maps.google.com/",
+    "photo": "default-masjid.jpg",
+    "updatedOn": "2026-10-17"
+  }
+]

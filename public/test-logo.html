@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mihrab Logo Preview</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f4f2; margin: 40px; }
+    .card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .card.dark { background: #081a14; color: white; }
+    h2 { font-size: 16px; margin-bottom: 12px; opacity: 0.8; }
+    img { max-height: 80px; width: auto; display: inline-block; }
+    .emblem { max-height: 80px; width: 80px; }
+    .row { display: flex; align-items: center; gap: 24px; }
+  </style>
+</head>
+<body>
+  <h1>Mihrab Brand Logo Asset Preview</h1>
+  
+  <div class="card">
+    <h2>1. Full Logo (Light Background) - logo.svg</h2>
+    <div class="row">
+      <img src="/logo.svg" alt="Mihrab Logo" />
+      <img src="/logo.svg" style="height: 48px;" alt="Mihrab Logo Small" />
+    </div>
+  </div>
+
+  <div class="card dark">
+    <h2>2. Full Logo (Dark Background) - logo-white.svg</h2>
+    <div class="row">
+      <img src="/logo-white.svg" alt="Mihrab Logo White" />
+      <img src="/logo-white.svg" style="height: 48px;" alt="Mihrab Logo White Small" />
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Emblem Only (Square 1:1) - logo-emblem.svg (Favicon / App Icon)</h2>
+    <div class="row">
+      <img src="/logo-emblem.svg" class="emblem" alt="Mihrab Emblem" />
+      <img src="/logo-emblem.svg" style="height: 48px; width: 48px;" alt="Mihrab Emblem Small" />
+      <img src="/logo-emblem.svg" style="height: 32px; width: 32px;" alt="Mihrab Emblem Favicon" />
+    </div>
+  </div>
+</body>
+</html>
+
